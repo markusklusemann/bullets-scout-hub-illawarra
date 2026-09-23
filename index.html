@@ -214,6 +214,13 @@
     .hero{padding:24px 0 20px;}
     .tab-btn{padding:13px 16px;font-size:14.5px;}
     .quiz-opt{padding:11px 12px;font-size:12.5px;}
+    /* Starting Offense/Defense call-sheet tables (23 Sep 2026): table-layout:fixed plus
+       width:100% meant the three fixed side columns (190+132+76=398px) alone were wider
+       than most phone screens, so every column — including the main Coverage/Call text —
+       got squeezed down to fit, reading as "very narrow". Give the table a min-width below
+       and let width:100% only apply when the viewport is actually wide enough for it; the
+       wrap's existing overflow-x:auto then scrolls horizontally instead of squishing. */
+    .call-sheet-table{width:auto;min-width:560px;}
   }
   .card-slot{height:492px;}
   .card{
@@ -912,7 +919,7 @@ const PLAYERS = [
     },
     "cue": "UNDER",
     "notes": [
-      "C&S 3s only - square stick, swipe, slide",
+      "C&S 3s only - square, stick, swipe, slide",
       "Long and mobile defender"
     ],
     "quiz": [
@@ -989,7 +996,7 @@ const PLAYERS = [
       "orb": "3.0",
       "ast": "2.0"
     },
-    "cue": "HIGH DROP",
+    "cue": "LOW DROP & MUCK",
     "statsOmit": [
       "C&S 3P%",
       "OFF DRIBBLE 3P%",
@@ -1123,13 +1130,13 @@ const PLAYERS = [
     ],
     "quiz": [
       {
-        "q": "What should we do against GRIDA on the offensive glass?",
+        "q": "What should we do when Grida crashes?",
         "opts": [
+          "Box out",
           "Box out and bump early",
-          "Leave him, he won't crash",
-          "Switch off him"
+          "Ignore and streak"
         ],
-        "correct": 0
+        "correct": 1
       }
     ],
     "flagged": false,
@@ -1194,7 +1201,7 @@ const PLAYERS = [
       "orb": "1.3",
       "ast": "1.1"
     },
-    "cue": "HIGH DROP",
+    "cue": "LOW DROP & MUCK",
     "statsOmit": [
       "C&S 3P%",
       "OFF DRIBBLE 3P%",
@@ -1283,19 +1290,10 @@ const PLAYERS = [
       "Dangerous shooter",
       "Target (mouse) in Post Ups"
     ],
-    "quiz": [
-      {
-        "q": "Where do we target ADNAM (mouse) offensively?",
-        "opts": [
-          "In Post Ups",
-          "In transition",
-          "At the rim"
-        ],
-        "correct": 0
-      }
-    ],
+    "quiz": [],
     "flagged": false,
     "injured": true,
+    "static": true,
     "oneLiner": "Shooter"
   }
 ];
@@ -1511,7 +1509,7 @@ const TEAM_QUIZ = [
       "Low Drop",
       "High Drop"
     ],
-    "correct": 2
+    "correct": 1
   },
   {
     "q": "How do we initially attack Froling and Martin in High Drop?",
@@ -1704,10 +1702,10 @@ function parseStatVal(s){
   return isNaN(n) ? null : n;
 }
 const STATS_COLUMNS = [
-  {label:'C&S 3P%', get:p=>p.avg2.cs3, pct:true, decimals:0},
-  {label:'OFF DRIBBLE 3P%', get:p=>p.avg2.db3, pct:true, decimals:0},
+  {label:'C&S 3P%', get:p=>p.avg2.cs3, pct:true, decimals:0, highlight:{hi:37, lo:32}},
+  {label:'OFF DRIBBLE 3P%', get:p=>p.avg2.db3, pct:true, decimals:0, highlight:{hi:37, lo:32}},
   {label:'3PA RATE', get:p=>p.avg2.pa3, pct:true, decimals:0},
-  {label:'FT%', get:p=>p.avg2.ft, pct:true, decimals:0},
+  {label:'FT%', get:p=>p.avg2.ft, pct:true, decimals:0, highlight:{hi:80, lo:70}},
   {label:'FT RATE', get:p=>p.avg2.ftr, pct:true, decimals:0},
   {label:'ORB/G', get:p=>p.avg2.orb, pct:false, decimals:1},
   {label:'AST/G', get:p=>p.avg2.ast, pct:false, decimals:1},
@@ -1766,8 +1764,8 @@ function renderStatsSummary(){
       if(omitted(p,col)) return `<td class="stat-cell omitted">&mdash;</td>`;
       const raw = col.get(p);
       const val = parseStatVal(raw);
-      const hi = col.pct && val!==null && val > 37;
-      const lo = col.pct && val!==null && val < 32;
+      const hi = col.highlight && val!==null && val > col.highlight.hi;
+      const lo = col.highlight && val!==null && val < col.highlight.lo;
       const shownVal = formatStatVal(raw, col);
       return `<td class="stat-cell ${hi?'hi':''}${lo?'lo':''}">${shownVal}</td>`;
     }).join('');
@@ -1781,7 +1779,7 @@ function renderStatsSummary(){
   el.innerHTML = `
   ${coachNote}
   ${topBottomMiniTables()}
-  <div class="stats-legend">C&amp;S 3P% and Off Dribble 3P% are read verbatim from the club's own "Opponent Shooting #s" sheet (its own pre-computed multi-year aggregate per player). 3PA Rate, FT% and FT Rate are volume-weighted blends of each player's last 3 seasons on RealGM (games-weighted, so a short injury-affected season counts less). ORB% and AST% are shown as ORB/G and AST/G instead &mdash; RealGM doesn't publish team-relative advanced percentages for the NBL, so these are raw per-game counts, not shooting/rebounding rates, and aren't colored. Every player's blend is his last 3 Australian NBL seasons except MARTIN, who has only one career NBL game &mdash; his blend uses his last 3 seasons overall (German-BBL/Turkish-BSL/Eurocup/Spanish-ACB, at his usual small-forward role) since an NBL-only sample didn't exist for him. NARKLE reflects only his 2025-26 rookie NBL season (no 3-season history exists yet); PATTERSON's NBL "last 3" spans 2025-26/2021-22/2020-21 since he wasn't in the league 2022-2024. Froling and Peatling omit C&amp;S 3P% / Off Dribble 3P% / 3PA Rate (&mdash;) as not a meaningful read for their role. ADNAM is left out of this table entirely (and out of the Team Avg row and the Best/Worst mini tables) while he's carrying an OUT designation &mdash; re-add him once he's confirmed available. <span class="sw" style="background:var(--focus-green-bg);border-color:var(--focus-green);"></span>Green = above 37%. <span class="sw" style="background:var(--miss-red-bg);border-color:var(--miss-red);"></span>Red = below 32% (percentage columns only).</div>
+  <div class="stats-legend">C&amp;S 3P% and Off Dribble 3P% are read verbatim from the club's own "Opponent Shooting #s" sheet (its own pre-computed multi-year aggregate per player). 3PA Rate, FT% and FT Rate are volume-weighted blends of each player's last 3 seasons on RealGM (games-weighted, so a short injury-affected season counts less). ORB% and AST% are shown as ORB/G and AST/G instead &mdash; RealGM doesn't publish team-relative advanced percentages for the NBL, so these are raw per-game counts, not shooting/rebounding rates, and aren't colored. Every player's blend is his last 3 Australian NBL seasons except MARTIN, who has only one career NBL game &mdash; his blend uses his last 3 seasons overall (German-BBL/Turkish-BSL/Eurocup/Spanish-ACB, at his usual small-forward role) since an NBL-only sample didn't exist for him. NARKLE reflects only his 2025-26 rookie NBL season (no 3-season history exists yet); PATTERSON's NBL "last 3" spans 2025-26/2021-22/2020-21 since he wasn't in the league 2022-2024. Froling and Peatling omit C&amp;S 3P% / Off Dribble 3P% / 3PA Rate (&mdash;) as not a meaningful read for their role. ADNAM is left out of this table entirely (and out of the Team Avg row and the Best/Worst mini tables) while he's carrying an OUT designation &mdash; re-add him once he's confirmed available. <span class="sw" style="background:var(--focus-green-bg);border-color:var(--focus-green);"></span>Green / <span class="sw" style="background:var(--miss-red-bg);border-color:var(--miss-red);"></span>red highlights apply only to C&amp;S 3P%, Off Dribble 3P% (green above 37%, red below 32%) and FT% (green above 80%, red below 70%). 3PA Rate, FT Rate, ORB/G and AST/G are never colored.</div>
   <div class="stats-table-wrap"><table class="stats-table">
     <thead><tr><th>Player</th>${STATS_COLUMNS.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
     <tbody>${rows}</tbody>
@@ -2054,14 +2052,8 @@ const MATCHUPS = [
     "bullets": [
       "VELICKA",
       "MAYEN",
-      {
-        "name": "HARRISON",
-        "note": "muck"
-      },
-      {
-        "name": "HOLT",
-        "note": "muck"
-      }
+      "HARRISON",
+      "HOLT"
     ]
   },
   {
