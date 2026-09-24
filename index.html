@@ -743,15 +743,19 @@
         Hawks (completed by Alex Grossman, 25.9.2026). Team Overview's Keys to Victory and Starting
         Defense/Offense tables come from the matching "Team Overview -- Data Collection Template"
         (same completer, same date).</li>
-        <li>Grida (calf) and Peatling (back spasms) are both flagged <code>injured</code> per the
-        template's own notes ("may return" for Grida; no return timeline given for Peatling) --
-        neither is marked <code>static</code>/locked, since the template doesn't say either is
-        ruled out for this game. Revisit before game day if either is confirmed out.</li>
-        <li>Stats (MIN, PPG, REB, AST, 3P%, FT%, OREB%, FT rate) are <b>not yet sourced</b> -- this
-        session's web research tools (RealGM lookup) were unavailable (WebSearch disabled for this
-        org, WebFetch requires a live approval this session couldn't obtain), so every stats cell
-        reads "Pending" rather than a guessed number. Needs a RealGM pass once network access is
-        available, or the figures pasted directly into a message.</li>
+        <li>Peatling (back spasms) has recovered and is no longer flagged <code>injured</code>.
+        Grida is now flagged <code>injured</code> and <code>static</code>/locked -- the latest
+        template explicitly notes his recall question can be removed because he's OUT, so his card
+        is fully locked and he's excluded from the Stats Summary and Matchups, same treatment
+        Adnam had while he was OUT. Adnam himself is active again this round (no longer
+        <code>injured</code>/<code>static</code>) and is back in the Stats Summary with his recall
+        question restored, though he stays excluded from Matchups per the standing bench-exclusion
+        rule.</li>
+        <li>Stats (C&amp;S 3P%, Off Dribble 3P%, 3PA Rate, FT%, FT Rate, ORB/G, AST/G) are sourced
+        from a mix of the club's own shooting sheet and RealGM last-3-season blends -- see the Stats
+        Summary tab's own legend for the full breakdown and per-player caveats. MacDonald is new to
+        the roster this round and hasn't been sourced yet, so his row reads "Pending" across the
+        board until a RealGM pass (or the figures pasted directly into a message) can fill it in.</li>
         <li>Illawarra Hawks crest added to the hero, and all 12 player headshots are now wired
         onto their cards -- both from the club-supplied photo folder. The filenames were
         anonymized hashes with no player names, so Markus confirmed the photo-to-player match by
@@ -764,8 +768,11 @@
         Rouhliadeff, Harrison, Holt) via the same nickname-to-surname mapping confirmed with him on
         the NZ and Cairns builds -- see <code>nz-scout-hub-build.md</code> &sect;13 and
         <code>cairns-scout-hub-build.md</code> &sect;8 for how each nickname was resolved.
-        Hickey's Harrison/Holt options are specifically called out as "muck" coverage. Narkle and
-        Adnam (bench) were excluded per Markus's instruction, for simplicity.
+        Narkle, Adnam, MacDonald and Grida are excluded from Matchups per Markus's instruction, for
+        simplicity (Grida and MacDonald added to that exclude list this round -- Grida because he's
+        now OUT, MacDonald because he's new to the roster). Hickey's Harrison/Holt options were
+        originally flagged as "muck" coverage but that tag was removed at Markus's request once it
+        no longer matched the live Team Overview call.
         <code>BULLETS_PHOTOS</code> (the Bullets roster's own headshots) is carried over unchanged
         from the NZ build, since the Bullets roster doesn't change between opponents.</li>
         <li>Each player's own recall quiz tests their real PnR/screen coverage call (the one
@@ -1104,46 +1111,6 @@ const PLAYERS = [
   },
   {
     "side": "rotation",
-    "surname": "GRIDA",
-    "full": "Daniel Grida",
-    "num": "11",
-    "pos": "F",
-    "styleTag": "Energy Guy",
-    "styleTagSource": "club",
-    "shootCat": "DRIVER",
-    "ht": "6'6\" (198cm)",
-    "wt": null,
-    "avg2": {
-      "cs3": "32.7%",
-      "db3": "13.3%",
-      "pa3": "23.7%",
-      "ft": "66.2%",
-      "ftr": "30.8%",
-      "orb": "0.4",
-      "ast": "0.3"
-    },
-    "cue": "UNDER",
-    "notes": [
-      "Physical crasher - anticipate shots & bump early/face block out",
-      "C&S only, prefers to cut",
-      "Active defender, will blanket full court"
-    ],
-    "quiz": [
-      {
-        "q": "What should we do when Grida crashes?",
-        "opts": [
-          "Box out",
-          "Box out and bump early",
-          "Ignore and streak"
-        ],
-        "correct": 1
-      }
-    ],
-    "flagged": false,
-    "oneLiner": "Crash"
-  },
-  {
-    "side": "rotation",
     "surname": "NARKLE",
     "full": "Johny Narkle",
     "num": "16",
@@ -1180,6 +1147,46 @@ const PLAYERS = [
     ],
     "flagged": false,
     "oneLiner": "Cutter"
+  },
+  {
+    "side": "rotation",
+    "surname": "PATTERSON",
+    "full": "Lamar Patterson",
+    "num": "24",
+    "pos": "G/F",
+    "styleTag": "Scoring Big Guard",
+    "styleTagSource": "club",
+    "shootCat": "SHOOTER",
+    "ht": "6'5\" (196cm)",
+    "wt": null,
+    "avg2": {
+      "cs3": "33.3%",
+      "db3": "30.5%",
+      "pa3": "31.0%",
+      "ft": "69.0%",
+      "ftr": "25.7%",
+      "orb": "0.9",
+      "ast": "3.5"
+    },
+    "cue": "MIX IT UP",
+    "notes": [
+      "Score first mentality",
+      "Settles for dribble jumpers - contest and do not foul",
+      "Target (turtle) in PnR and stampedes"
+    ],
+    "quiz": [
+      {
+        "q": "What's PATTERSON's shot tendency?",
+        "opts": [
+          "Drives all the way to the rim",
+          "Settles for dribble jumpers",
+          "Spot-up 3 specialist"
+        ],
+        "correct": 1
+      }
+    ],
+    "flagged": false,
+    "oneLiner": "Scorer"
   },
   {
     "side": "rotation",
@@ -1228,45 +1235,6 @@ const PLAYERS = [
   },
   {
     "side": "bench",
-    "surname": "PATTERSON",
-    "full": "Lamar Patterson",
-    "num": "TBC",
-    "pos": "G/F",
-    "styleTag": "Scoring Big Guard",
-    "styleTagSource": "club",
-    "shootCat": "SHOOTER",
-    "ht": "6'5\" (196cm)",
-    "wt": null,
-    "avg2": {
-      "cs3": "33.3%",
-      "db3": "30.5%",
-      "pa3": "31.0%",
-      "ft": "69.0%",
-      "ftr": "25.7%",
-      "orb": "0.9",
-      "ast": "3.5"
-    },
-    "cue": "MIX IT UP",
-    "notes": [
-      "Score first mentality",
-      "Settles for dribble jumpers - contest and do not foul"
-    ],
-    "quiz": [
-      {
-        "q": "What's PATTERSON's shot tendency?",
-        "opts": [
-          "Drives all the way to the rim",
-          "Settles for dribble jumpers",
-          "Spot-up 3 specialist"
-        ],
-        "correct": 1
-      }
-    ],
-    "flagged": false,
-    "oneLiner": "Scorer"
-  },
-  {
-    "side": "bench",
     "surname": "ADNAM",
     "full": "Kyle Adnam",
     "num": "5",
@@ -1290,11 +1258,90 @@ const PLAYERS = [
       "Dangerous shooter",
       "Target (mouse) in Post Ups"
     ],
+    "quiz": [
+      {
+        "q": "Where do we target ADNAM (mouse) offensively?",
+        "opts": [
+          "In Post Ups",
+          "In transition",
+          "At the rim"
+        ],
+        "correct": 0
+      }
+    ],
+    "flagged": false,
+    "oneLiner": "Shooter"
+  },
+  {
+    "side": "bench",
+    "surname": "MACDONALD",
+    "full": "Fletcher MacDonald",
+    "num": "25",
+    "pos": "F/C",
+    "styleTag": "",
+    "styleTagSource": "club",
+    "shootCat": "BRICK",
+    "ht": "6'8\" (203cm)",
+    "wt": null,
+    "avg2": {
+      "cs3": "N/A",
+      "db3": "N/A",
+      "pa3": "N/A",
+      "ft": "N/A",
+      "ftr": "N/A",
+      "orb": "N/A",
+      "ast": "N/A"
+    },
+    "cue": "LOW DROP & MUCK",
+    "notes": [
+      "Slower lob roller",
+      "Target (turtle) in PnR and with Tyrell post ups"
+    ],
+    "quiz": [
+      {
+        "q": "What kind of roller is MACDONALD in the pick and roll?",
+        "opts": [
+          "Slower lob roller",
+          "Quick rim runner",
+          "Pop shooter"
+        ],
+        "correct": 0
+      }
+    ],
+    "flagged": false,
+    "oneLiner": "Backup big"
+  },
+  {
+    "side": "bench",
+    "surname": "GRIDA",
+    "full": "Daniel Grida",
+    "num": "11",
+    "pos": "F",
+    "styleTag": "Energy Guy",
+    "styleTagSource": "club",
+    "shootCat": "DRIVER",
+    "ht": "6'6\" (198cm)",
+    "wt": null,
+    "avg2": {
+      "cs3": "32.7%",
+      "db3": "13.3%",
+      "pa3": "23.7%",
+      "ft": "66.2%",
+      "ftr": "30.8%",
+      "orb": "0.4",
+      "ast": "0.3"
+    },
+    "cue": "UNDER",
+    "notes": [
+      "Physical crasher - anticipate shots & bump early/face block out",
+      "C&S only, prefers to cut",
+      "Active defender, will blanket full court"
+    ],
     "quiz": [],
     "flagged": false,
+    "oneLiner": "Crash",
     "injured": true,
-    "static": true,
-    "oneLiner": "Shooter"
+    "static": true
   }
 ];
 let reviewed = new Set();
@@ -1390,27 +1437,37 @@ const TEAM_OVERVIEW = {
       "personnel": "5",
       "call": [
         "Low Drop + Muck",
-        "Over on Harvey, Doyle",
-        "Mix it Up on Everyone else"
+        "vs Harvey, Weak & Over (big says \"Left\")",
+        "vs Doyle, Over",
+        "vs Everyone else, Mix It Up"
       ],
-      "status": ""
-    },
-    {
-      "situation": "Early Drag",
-      "personnel": "1-4",
-      "call": "Red",
-      "status": ""
-    },
-    {
-      "situation": "Early Drag",
-      "personnel": "5",
-      "call": "Under & Low Drop (except vs Harvey, Weak & Over)",
       "status": ""
     },
     {
       "situation": "Ready For",
       "personnel": "5",
-      "call": "High Drop",
+      "call": [
+        "High Drop",
+        "Muck Hickey"
+      ],
+      "status": ""
+    },
+    {
+      "situation": "Early Drag (4 Point Line)",
+      "personnel": "1-4 & 5",
+      "call": "Same as On-Ball Screens",
+      "status": ""
+    },
+    {
+      "situation": "Early Drag (Half Court)",
+      "personnel": "1-4",
+      "call": "Under",
+      "status": ""
+    },
+    {
+      "situation": "Early Drag (Half Court)",
+      "personnel": "5",
+      "call": "Low Drop",
       "status": ""
     },
     {
@@ -1435,7 +1492,7 @@ const TEAM_OVERVIEW = {
       "situation": "Their Main Sets",
       "personnel": "-",
       "call": [
-        "Flow (4-5 on 2nd side sets wide pin)",
+        "Flow (2nd side wide pin)",
         "Away",
         "Delay",
         "Floppy"
@@ -1463,11 +1520,11 @@ const TEAM_OVERVIEW = {
     {
       "situation": "HC Sets (When Slow)",
       "details": [
-        "Wedge Roll (hunt targets)",
-        "Cross (hunt targets)",
-        "Rub 52, Rub 25, Rub Stack",
-        "Away Stamp, Away Step",
-        "Horns 2 Flare"
+        "POINT - Curl Rub (Stack), Dribble, Hip 2, Stamp",
+        "HORNS - High Horns, 5 Backside, 45, Cross",
+        "SOB - Punch, Logo, Backside, L (short clock)",
+        "BOB - Clock",
+        "Clap with 5s every time"
       ],
       "status": ""
     },
@@ -1477,7 +1534,8 @@ const TEAM_OVERVIEW = {
         "Doyle",
         "Harvey",
         "Peatling",
-        "Blanchfield"
+        "Blanchfield",
+        "Patterson"
       ],
       "status": ""
     }
@@ -1779,7 +1837,7 @@ function renderStatsSummary(){
   el.innerHTML = `
   ${coachNote}
   ${topBottomMiniTables()}
-  <div class="stats-legend">C&amp;S 3P% and Off Dribble 3P% are read verbatim from the club's own "Opponent Shooting #s" sheet (its own pre-computed multi-year aggregate per player). 3PA Rate, FT% and FT Rate are volume-weighted blends of each player's last 3 seasons on RealGM (games-weighted, so a short injury-affected season counts less). ORB% and AST% are shown as ORB/G and AST/G instead &mdash; RealGM doesn't publish team-relative advanced percentages for the NBL, so these are raw per-game counts, not shooting/rebounding rates, and aren't colored. Every player's blend is his last 3 Australian NBL seasons except MARTIN, who has only one career NBL game &mdash; his blend uses his last 3 seasons overall (German-BBL/Turkish-BSL/Eurocup/Spanish-ACB, at his usual small-forward role) since an NBL-only sample didn't exist for him. NARKLE reflects only his 2025-26 rookie NBL season (no 3-season history exists yet); PATTERSON's NBL "last 3" spans 2025-26/2021-22/2020-21 since he wasn't in the league 2022-2024. Froling and Peatling omit C&amp;S 3P% / Off Dribble 3P% / 3PA Rate (&mdash;) as not a meaningful read for their role. ADNAM is left out of this table entirely (and out of the Team Avg row and the Best/Worst mini tables) while he's carrying an OUT designation &mdash; re-add him once he's confirmed available. <span class="sw" style="background:var(--focus-green-bg);border-color:var(--focus-green);"></span>Green / <span class="sw" style="background:var(--miss-red-bg);border-color:var(--miss-red);"></span>red highlights apply only to C&amp;S 3P%, Off Dribble 3P% (green above 37%, red below 32%) and FT% (green above 80%, red below 70%). 3PA Rate, FT Rate, ORB/G and AST/G are never colored.</div>
+  <div class="stats-legend">C&amp;S 3P% and Off Dribble 3P% are read verbatim from the club's own "Opponent Shooting #s" sheet (its own pre-computed multi-year aggregate per player). 3PA Rate, FT% and FT Rate are volume-weighted blends of each player's last 3 seasons on RealGM (games-weighted, so a short injury-affected season counts less). ORB% and AST% are shown as ORB/G and AST/G instead &mdash; RealGM doesn't publish team-relative advanced percentages for the NBL, so these are raw per-game counts, not shooting/rebounding rates, and aren't colored. Every player's blend is his last 3 Australian NBL seasons except MARTIN, who has only one career NBL game &mdash; his blend uses his last 3 seasons overall (German-BBL/Turkish-BSL/Eurocup/Spanish-ACB, at his usual small-forward role) since an NBL-only sample didn't exist for him. NARKLE reflects only his 2025-26 rookie NBL season (no 3-season history exists yet); PATTERSON's NBL "last 3" spans 2025-26/2021-22/2020-21 since he wasn't in the league 2022-2024. Froling and Peatling omit C&amp;S 3P% / Off Dribble 3P% / 3PA Rate (&mdash;) as not a meaningful read for their role. GRIDA is left out of this table entirely (and out of the Team Avg row and the Best/Worst mini tables) while he's carrying an OUT designation &mdash; re-add him once he's confirmed available. MACDONALD is new to the roster this round and hasn't been sourced on RealGM yet, so his row reads Pending across the board. <span class="sw" style="background:var(--focus-green-bg);border-color:var(--focus-green);"></span>Green / <span class="sw" style="background:var(--miss-red-bg);border-color:var(--miss-red);"></span>red highlights apply only to C&amp;S 3P%, Off Dribble 3P% (green above 37%, red below 32%) and FT% (green above 80%, red below 70%). 3PA Rate, FT Rate, ORB/G and AST/G are never colored.</div>
   <div class="stats-table-wrap"><table class="stats-table">
     <thead><tr><th>Player</th>${STATS_COLUMNS.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
     <tbody>${rows}</tbody>
@@ -2019,7 +2077,7 @@ const MATCHUPS = [
   {
     "tas": "DOYLE",
     "bullets": [
-      "MACKINNON",
+      "VELICKA",
       "NORTON",
       "HINTON",
       "MAYEN"
@@ -2028,8 +2086,8 @@ const MATCHUPS = [
   {
     "tas": "SWAKA LO BULUK",
     "bullets": [
-      "VELICKA",
-      "MACKINNON"
+      "MACKINNON",
+      "VELICKA"
     ]
   },
   {
@@ -2051,18 +2109,9 @@ const MATCHUPS = [
     "tas": "HICKEY",
     "bullets": [
       "VELICKA",
-      "MAYEN",
+      "MACKINNON",
       "HARRISON",
       "HOLT"
-    ]
-  },
-  {
-    "tas": "GRIDA",
-    "bullets": [
-      "WILLIAMS",
-      "ROUHLIADEFF",
-      "MACKINNON",
-      "VELICKA"
     ]
   },
   {
@@ -2070,8 +2119,7 @@ const MATCHUPS = [
     "bullets": [
       "WILLIAMS",
       "ROUHLIADEFF",
-      "MACKINNON",
-      "VELICKA"
+      "MACKINNON"
     ]
   },
   {
@@ -2081,6 +2129,14 @@ const MATCHUPS = [
       "HOLT",
       "WILLIAMS",
       "ROUHLIADEFF"
+    ]
+  },
+  {
+    "tas": "PATTERSON",
+    "bullets": [
+      "WILLIAMS",
+      "ROUHLIADEFF",
+      "MAYEN"
     ]
   }
 ]
@@ -2167,7 +2223,7 @@ const GAME_SITUATIONS = [
     "opts": [
       "Red",
       "Mix it up & High Drop",
-      "Under & High Drop"
+      "Under & Low Drop"
     ],
     "correct": 2
   },
