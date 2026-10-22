@@ -472,6 +472,9 @@
   .stats-table.stats-main{width:auto;min-width:0;table-layout:fixed;}
   .stats-table.stats-main th{vertical-align:bottom;white-space:nowrap;}
   .stats-table.stats-main td.name-cell{white-space:nowrap;}
+  .stats-table.stats-main th.sortable{cursor:pointer;user-select:none;}
+  .stats-table.stats-main th.sortable:hover,.stats-table.stats-main th.sorted{color:var(--ink);}
+  .stats-table.stats-main .sort-arrow{display:inline-block;width:11px;margin-left:2px;font-size:9px;}
   .stats-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px;}
   .stats-table th{text-align:right;font-family:"IBM Plex Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);padding:8px 10px;border-bottom:2px solid var(--line);}
   .stats-table th:first-child{text-align:left;}
@@ -883,13 +886,13 @@ const PLAYERS = [
    quiz:[
       {q:'Swaka Lo Buluk takes corner catch-and-shoot 3s. What\'s our closeout?', opts:['Sag off and protect the rim','Go under and give him space','High stick hand, he\'ll rush his shot'], correct:2}
    ], flagged:false},
-  {side:'starter', surname:'MARTIN', full:'Kelan Martin', num:'30', pos:'F/W',
-   styleTag:'Shooting Forward', styleTagSource:'alex', shootCat:'SNIPER', cheat:'Shooting Forward', cheatPnr:'HIGH DROP / RED',
-   ht:'6\'6" (198cm)', wt:null,
-   avg2:{cs3:'41.9%',db3:'33.8%',pa3:'47.0%',ft:'79.9%',ftr:'20.5%',orb:'2.5%',ast:'7.0%'},
-   cue:'RED', notes:['Sniper looking to pop or ghost → physical REDs, no contact = no switch','Quick trigger → when plugging off him, cannot allow C&S','Handling more in PnR → into the ball, active plugs','Target in PnR → pop'],
+  {side:'starter', surname:'MAKER', full:'Makur Maker', num:'44', pos:'C',
+   styleTag:'Mobile Popping Big', styleTagSource:'alex', shootCat:'DRIVER', cheat:'Mobile Popping Big', cheatPnr:'HIGH DROP / RED',
+   ht:'7\'0" (213cm)', wt:null,
+   avg2:{cs3:'32.2%',db3:'31.6%',pa3:'51.7%',ft:'76.9%',ftr:'24.8%',orb:'9.0%',ast:'9.0%'},
+   cue:'RED', notes:['Lob & pocket roll threat → keep above us','Pops for C&S 3s → ready to RED','Likes driving LEFT → cut him off'],
    quiz:[
-      {q:'How can we quickly target Martin?', opts:['In PnR - pocket and clide','Off-ball - find windows and stampede','In PnR - pop'], correct:2}
+      {q:'What does Maker do that Froling does not?', opts:['Lob & pocket roll','Likes to drive LEFT','Pop'], correct:2}
    ], flagged:false},
   {side:'starter', surname:'FROLING', full:'Sam Froling', num:'13', pos:'C',
    styleTag:'Lefty Rim Rolling Big', styleTagSource:'alex', shootCat:'BRICK', cheat:'Lefty Rim Rolling Big', cheatPnr:'HIGH DROP / LOW DROP',
@@ -921,21 +924,21 @@ const PLAYERS = [
    quiz:[
       {q:'How does Grida make energy plays?', opts:['Crashes the glass','Sprints in transition','Active cutter'], correct:[0,1,2]}
    ], flagged:false},
-  {side:'rotation', surname:'PATTERSON', full:'Lamar Patterson', num:'24', pos:'W/F',
+  {side:'rotation', surname:'MARTIN', full:'Kelan Martin', num:'30', pos:'F/W',
+   styleTag:'Shooting Forward', styleTagSource:'alex', shootCat:'SNIPER', cheat:'Shooting Forward', cheatPnr:'HIGH DROP / RED',
+   ht:'6\'6" (198cm)', wt:null,
+   avg2:{cs3:'41.9%',db3:'33.8%',pa3:'47.0%',ft:'79.9%',ftr:'20.5%',orb:'2.5%',ast:'7.0%'},
+   cue:'RED', notes:['Sniper looking to pop or ghost → physical REDs, no contact = no switch','Quick trigger → when plugging off him, cannot allow C&S','Handling more in PnR → into the ball, active plugs','Target in PnR → pop'],
+   quiz:[
+      {q:'How can we quickly target Martin?', opts:['In PnR - pocket and clide','Off-ball - find windows and stampede','In PnR - pop'], correct:2}
+   ], flagged:false},
+  {side:'bench', surname:'PATTERSON', full:'Lamar Patterson', num:'24', pos:'W/F',
    styleTag:'Scorer', styleTagSource:'alex', shootCat:'SHOOTER', cheat:'Scorer', cheatPnr:'HIGH DROP / RED',
    ht:'6\'5" (196cm)', wt:null,
    avg2:{cs3:'33.5%',db3:'30.3%',pa3:'33.5%',ft:'57.4%',ftr:'18.4%',orb:'4.6%',ast:'22.8%'},
    cue:'MIX IT UP', notes:['Settles for dribble jumpers → contest and do not foul','Target off ball → find windows and stampedes'],
    quiz:[
       {q:'Patterson settles for dribble jumpers. What do we do?', opts:['Foul him to stop the shot','Contest and do not foul','Back off and give him space'], correct:1}
-   ], flagged:false},
-  {side:'rotation', surname:'MAKER', full:'Makur Maker', num:'44', pos:'C',
-   styleTag:'Mobile Popping Big', styleTagSource:'alex', shootCat:'DRIVER', cheat:'Mobile Popping Big', cheatPnr:'HIGH DROP / RED',
-   ht:'7\'0" (213cm)', wt:null,
-   avg2:{cs3:'32.2%',db3:'31.6%',pa3:'51.7%',ft:'76.9%',ftr:'24.8%',orb:'9.0%',ast:'9.0%'},
-   cue:'RED', notes:['Lob & pocket roll threat → keep above us','Pops for C&S 3s → ready to RED','Likes driving LEFT → cut him off'],
-   quiz:[
-      {q:'What does Maker do that Froling does not?', opts:['Lob & pocket roll','Likes to drive LEFT','Pop'], correct:2}
    ], flagged:false},
   {side:'bench', surname:'NARKLE', full:'Johny Narkle', num:'16', pos:'W',
    styleTag:'Cutter', styleTagSource:'alex', shootCat:'DRIVER', cheat:'Cutter', cheatPnr:'RED',
@@ -1075,7 +1078,7 @@ const TEAM_OVERVIEW = {
     {situation:'Their Press', details:'AFT - They 12 into 32', status:''},
     {situation:'Their Zone', details:'Occasional 2-3, middle takes high post', status:''},
     {situation:'HC Sets (When Slow)', details:{lead:['→ Run sets after makes'],items:['AWAY (Angle, 4)','RUB (Exit, 34/35, 53/54, Stack)','HIP (Wide)']}, status:'Updated'},
-    {situation:'Targets', details:{items:['Harvey','Doyle','Martin','Patterson','Blanchfield'], tail:['→ Off-ball - stampede, find windows, set screens']}, status:''},
+    {situation:'Targets', details:{items:['Harvey','Doyle','Martin','Blanchfield','Patterson'], tail:['→ Off-ball - stampede, find windows, set screens']}, status:''},
   ],
   shooting: { efg: null, ts: null },
 };
@@ -1319,8 +1322,8 @@ function topBottomMiniTables(){
   // "Best 3PT Shooters" now reads C&S 3P% (the closest analog to the old
   // single 3P% column now that Stats Summary splits shooting into
   // catch-and-shoot vs off-the-dribble); "Worst FT Shooters" is unchanged.
-  const withTP = PLAYERS.map(p=>({surname:p.surname, val:parseStatVal(p.avg2.cs3)})).filter(x=>x.val!==null);
-  const withFT = PLAYERS.map(p=>({surname:p.surname, val:parseStatVal(p.avg2.ft)})).filter(x=>x.val!==null);
+  const withTP = PLAYERS.filter(p=>p.side!=='bench').map(p=>({surname:p.surname, val:parseStatVal(p.avg2.cs3)})).filter(x=>x.val!==null);
+  const withFT = PLAYERS.filter(p=>p.side!=='bench').map(p=>({surname:p.surname, val:parseStatVal(p.avg2.ft)})).filter(x=>x.val!==null);
   const best3pt = [...withTP].sort((a,b)=>b.val-a.val).slice(0,3);
   const worstFt = [...withFT].sort((a,b)=>a.val-b.val).slice(0,3);
   const mkTable = (title, rows)=>`
@@ -1336,6 +1339,21 @@ function topBottomMiniTables(){
   </div>`;
 }
 
+let statsSort = {col:null, dir:null};  // col: -1 = player name, 0.. = STATS_COLUMNS index, null = roster order
+function sortStatsPlayers(){
+  const list = PLAYERS.slice();
+  if(statsSort.col===null) return list;
+  const dir = statsSort.dir==='asc' ? 1 : -1;
+  if(statsSort.col===-1) return list.sort((a,b)=>dir*a.surname.localeCompare(b.surname));
+  const col = STATS_COLUMNS[statsSort.col];
+  return list.sort((a,b)=>{
+    const va = parseStatVal(col.get(a)), vb = parseStatVal(col.get(b));
+    if(va===null && vb===null) return 0;
+    if(va===null) return 1;          // blanks always last
+    if(vb===null) return -1;
+    return dir*(va-vb);
+  });
+}
 function renderStatsSummary(){
   const el = document.getElementById('statsSummaryBody');
   if(!el) return;
@@ -1367,7 +1385,7 @@ function renderStatsSummary(){
     const star = (typeof raw==='string' && raw.includes('*')) ? '*' : '';
     return Math.round(val)+(pct?'%':'')+star;
   }
-  const rows = PLAYERS.map(p=>{
+  const rows = sortStatsPlayers().map(p=>{
     const cells = STATS_COLUMNS.map((col,ci)=>{
       const raw = col.get(p);
       const val = parseStatVal(raw);
@@ -1389,12 +1407,24 @@ function renderStatsSummary(){
   el.innerHTML = `
   ${coachNote}
   ${topBottomMiniTables()}
-  <div class="stats-legend">C&amp;S / Off Dribble 3P% come from the club's Opponent Shooting #s sheet. All other columns are RealGM averages across the <strong>2023-24 to 2026-27</strong> seasons, covering all competitions played (NBA, G League, NCAA, International), weighted by games played — see the methodology doc for sourcing and blending rules. Green / red: C&amp;S and Off Dribble 3P% 37%+ / 29% or lower; FT% 80%+ / 68% or lower; FT Rate 37%+. A blank cell means no verified data.</div>
+  <div class="stats-legend">C&amp;S / Off Dribble 3P% come from the club's Opponent Shooting #s sheet. All other columns are RealGM averages across the <strong>2023-24 to 2026-27</strong> seasons, covering all competitions played (NBA, G League, NCAA, International), weighted by games played — see the methodology doc for sourcing and blending rules. Green / red: C&amp;S and Off Dribble 3P% 37%+ / 29% or lower; FT% 80%+ / 68% or lower; FT Rate 37%+. A blank cell means no verified data. Click a column header to sort (click again to reverse, a third time to reset).</div>
   <div class="stats-table-wrap"><table class="stats-table stats-main">
-    <thead><tr><th>Player</th>${STATS_COLUMNS.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
+    <thead><tr>${[{label:'Player'}].concat(STATS_COLUMNS).map((c,ci)=>{ const idx = ci-1; const on = statsSort.col===idx; return `<th class=\"sortable${on?' sorted':''}\" data-sort=\"${idx}\" tabindex=\"0\" role=\"button\" aria-sort=\"${on?(statsSort.dir==='asc'?'ascending':'descending'):'none'}\" title=\"Click to sort\">${c.label}<span class=\"sort-arrow\">${on?(statsSort.dir==='asc'?'▲':'▼'):''}</span></th>`; }).join('')}</tr></thead>
     <tbody>${rows}</tbody>
     <tfoot><tr><td class="name-cell">TEAM AVG</td>${avgCells}</tr></tfoot>
   </table></div>`;
+  el.querySelectorAll('th.sortable').forEach(th=>{
+    const go = ()=>{
+      const idx = Number(th.dataset.sort);
+      const first = idx===-1 ? 'asc' : 'desc';
+      if(statsSort.col!==idx) statsSort = {col:idx, dir:first};
+      else if(statsSort.dir===first) statsSort = {col:idx, dir:first==='asc'?'desc':'asc'};
+      else statsSort = {col:null, dir:null};
+      renderStatsSummary();
+    };
+    th.addEventListener('click', go);
+    th.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); go(); } });
+  });
 }
 
 // ---------- Summary tab ----------
@@ -1634,12 +1664,12 @@ const MATCHUPS = [
   {tas:'HARVEY', bullets:[{n:'HINTON',starter:true},'NORTON','NETO','MAYEN']},
   {tas:'DOYLE', bullets:[{n:'NETO',starter:true},'NORTON','HINTON','MAYEN']},
   {tas:'SWAKA LO BULUK', bullets:[{n:'MACKINNON',starter:true},'MURRAY','MAG']},
-  {tas:'MARTIN', bullets:[{n:'WILLIAMS',starter:true},'ROUHLIADEFF','MAYEN','MAG']},
+  {tas:'MAKER', bullets:['HARRISON','ROUHLIADEFF','WOODHILL']},
   {tas:'FROLING', bullets:[{n:'HARRISON',starter:true},'ROUHLIADEFF','WOODHILL']},
   {tas:'HICKEY', bullets:['HINTON','NORTON','MACKINNON','MURRAY']},
   {tas:'BLANCHFIELD', bullets:['MURRAY','MACKINNON','NETO','MAG']},
   {tas:'GRIDA', bullets:['MURRAY','MAG','MACKINNON','MAYEN']},
-  {tas:'MAKER', bullets:['HARRISON','ROUHLIADEFF','WOODHILL']},
+  {tas:'MARTIN', bullets:[{n:'WILLIAMS',starter:true},'ROUHLIADEFF','MAYEN','MAG']},
   {tas:'PATTERSON', bullets:['WILLIAMS','ROUHLIADEFF','MAYEN','MAG','MACKINNON']},
 ];
 // Bullets player photos - new NBL27 gold-trim headshots supplied by Alex 12 Oct 2026
