@@ -907,6 +907,12 @@ const PLAYERS = [
    quiz:[
       {q:'Where is Hickey most dangerous?', opts:['Transition','In PnR','Finding windows'], correct:0}
    ], flagged:false},
+  {side:'rotation', surname:'BLANCHFIELD', full:'Todd Blanchfield', num:'21', pos:'W',
+   styleTag:'Movement Shooter', styleTagSource:'alex', shootCat:'SHOOTER', cheat:'Movement Shooter', cheatPnr:'RED',
+   ht:'6\'6" (198cm)', wt:null,
+   avg2:{cs3:'36.6%',db3:'27.8%',pa3:'68.8%',ft:'81.3%',ftr:'20.1%',orb:'4.5%',ast:'6.2%'},
+   cue:'MIX IT UP', notes:['Aggressive spot up shooter → ID in transition','Active cutter → bump early','Target on & off ball'],
+   noQuiz:true, quiz:[], flagged:false},
   {side:'rotation', surname:'GRIDA', full:'Daniel Grida', num:'11', pos:'W',
    styleTag:'Energy Guy', styleTagSource:'alex', shootCat:'DRIVER', cheat:'Energy Guy', cheatPnr:'RED',
    ht:'6\'6" (198cm)', wt:null,
@@ -944,15 +950,10 @@ const PLAYERS = [
    ht:'6\'0" (183cm)', wt:null,
    avg2:{cs3:'38.6%',db3:'29.3%',pa3:'51.9%',ft:'85.6%',ftr:'29.0%',orb:'1.3%',ast:'22.7%'},
    cue:'MORE OVER', notes:['Will pull up off dribble in transition → blanket and into ball','Target in PnR & Post Ups'],
+   injured:true,
    quiz:[
       {q:'Adnam will pull up off the dribble in transition. What do we do?', opts:['Sag back to the paint','Blanket and into the ball','Stop at the 3-point line and wait'], correct:1}
    ], flagged:false},
-  {side:'bench', surname:'BLANCHFIELD', full:'Todd Blanchfield', num:'21', pos:'W',
-   styleTag:'Movement Shooter', styleTagSource:'alex', shootCat:'SHOOTER', cheat:'Movement Shooter', cheatPnr:'',
-   ht:'6\'6" (198cm)', wt:null,
-   avg2:{cs3:'36.6%',db3:'27.8%',pa3:'68.8%',ft:'81.3%',ftr:'20.1%',orb:'4.5%',ast:'6.2%'},
-   cue:'MIX IT UP', notes:['Aggressive shooter in transition','Active cutter','Target (turtle) in PnR'],
-   injured:true, static:true, quiz:[], flagged:false},
 ];
 
 let reviewed = new Set();
@@ -1074,7 +1075,7 @@ const TEAM_OVERVIEW = {
     {situation:'Their Press', details:'AFT - They 12 into 32', status:''},
     {situation:'Their Zone', details:'Occasional 2-3, middle takes high post', status:''},
     {situation:'HC Sets (When Slow)', details:{lead:['→ Run sets after makes'],items:['AWAY (Angle, 4)','RUB (Exit, 34/35, 53/54, Stack)','HIP (Wide)']}, status:'Updated'},
-    {situation:'Targets', details:{items:['Harvey','Doyle','Martin','Patterson'], tail:['→ Off-ball - stampede, find windows, set screens']}, status:''},
+    {situation:'Targets', details:{items:['Harvey','Doyle','Martin','Patterson','Blanchfield'], tail:['→ Off-ball - stampede, find windows, set screens']}, status:''},
   ],
   shooting: { efg: null, ts: null },
 };
@@ -1415,7 +1416,7 @@ function renderSummary(){
         <ol class="cs-keys">${TEAM_OVERVIEW.keysToVictory.map(k=>`<li>${k}</li>`).join('')}</ol>
       </div>
       <div class="cs-section" style="margin-top:16px;"><b>Personnel, at a glance</b>
-        <div style="margin-top:8px;">${PLAYERS.filter(p=>p.surname!=='BLANCHFIELD').map(p=>`<div class="cheat-row">${shootBadge(p.shootCat)}<b>${p.surname}</b> <span class="cheat-desc">${p.cheat || p.styleTag || ''}</span>${p.cheatPnr ? `<span class="cheat-pnr">He will: ${p.cheatPnr.split(' / ').map(c=>'<span class="pnr-'+c.toLowerCase().replace(/ /g,'-')+'">'+c+'</span>').join('<span class="pnr-sep"> / </span>')}</span>` : ''}</div>`).join('')}</div>
+        <div style="margin-top:8px;">${PLAYERS.map(p=>`<div class="cheat-row">${shootBadge(p.shootCat)}<b>${p.surname}</b> <span class="cheat-desc">${p.cheat || p.styleTag || ''}</span>${p.cheatPnr ? `<span class="cheat-pnr">He will: ${p.cheatPnr.split(' / ').map(c=>'<span class="pnr-'+c.toLowerCase().replace(/ /g,'-')+'">'+c+'</span>').join('<span class="pnr-sep"> / </span>')}</span>` : ''}</div>`).join('')}</div>
       </div>
     </div>`;
   } else {
@@ -1551,7 +1552,7 @@ function cardHTML(p, i){
   // face is reachable, so the tap hint and page dots are suppressed rather
   // than promising an interaction that's deliberately disabled.
   const tapHint = p.static ? `<div class="tap-hint tap-hint-static">OUT — injured</div>` : `<div class="tap-hint">Tap for scout info ▸</div>`;
-  const pageDots = p.static ? '' : `<div class="page-dots"><span class="page-dot active"></span><span class="page-dot"></span><span class="page-dot"></span></div>`;
+  const pageDots = p.static ? '' : `<div class="page-dots"><span class="page-dot active"></span><span class="page-dot"></span>${p.noQuiz ? '' : '<span class="page-dot"></span>'}</div>`;
   const cardTabindex = p.static ? '-1' : '0';
   const cardRole = p.static ? '' : 'role="button"';
   const ariaLabel = p.static ? `${p.full} — injured, card locked` : `${p.full} scout card, tap to cycle through photo, scout notes and recall quiz`;
@@ -1571,9 +1572,9 @@ function cardHTML(p, i){
       <div class="face face-info" data-page="1">
         <div class="back-head"><span class="name">${p.surname}</span><span class="num">#${p.num}</span></div>
         <ul class="keys">${keys.map(k=>`<li>${k}</li>`).join('')}</ul>
-        <div class="tap-hint-b">Tap for recall quiz ▸</div>
+        <div class="tap-hint-b">${p.noQuiz ? 'Tap to flip back ◂' : 'Tap for recall quiz ▸'}</div>
       </div>
-      <div class="face face-quiz" data-page="2">
+      ${p.noQuiz ? '' : `<div class="face face-quiz" data-page="2">
         <div class="back-head"><span class="name">${p.surname}</span><span class="num">#${p.num}</span></div>
         <div class="quiz-lock-note" data-lock-note>&#128274; Answer to unlock the card again.</div>
         ${p.quiz.map((qz,qi)=>`
@@ -1585,7 +1586,7 @@ function cardHTML(p, i){
           </div>
           <div class="quiz-fb" data-fb></div>
         </div>`).join('')}
-      </div>
+      </div>`}
       ${pageDots}
     </div>
   </div>`;
@@ -1636,6 +1637,7 @@ const MATCHUPS = [
   {tas:'MARTIN', bullets:[{n:'WILLIAMS',starter:true},'ROUHLIADEFF','MAYEN','MAG']},
   {tas:'FROLING', bullets:[{n:'HARRISON',starter:true},'ROUHLIADEFF','WOODHILL']},
   {tas:'HICKEY', bullets:['HINTON','NORTON','MACKINNON','MURRAY']},
+  {tas:'BLANCHFIELD', bullets:['MURRAY','MACKINNON','NETO','MAG']},
   {tas:'GRIDA', bullets:['MURRAY','MAG','MACKINNON','MAYEN']},
   {tas:'MAKER', bullets:['HARRISON','ROUHLIADEFF','WOODHILL']},
   {tas:'PATTERSON', bullets:['WILLIAMS','ROUHLIADEFF','MAYEN','MAG','MACKINNON']},
@@ -1827,7 +1829,7 @@ const TEAM_OVERVIEW_ENABLED = true;
 // Static (injured) cards can never be flipped or quizzed, so they're
 // excluded from both denominators - keeps 100%-based gates (Stats Summary,
 // the cheat sheet, the HUD badge) genuinely reachable by a normal user.
-const TOTAL_PLAYERS = PLAYERS.filter(p=>!p.static).length;
+const TOTAL_PLAYERS = PLAYERS.filter(p=>!p.static && !p.noQuiz).length;
 const TOTAL_QUIZZES = PLAYERS.filter(p=>!p.static).reduce((n,p)=>n+p.quiz.length,0);
 
 // ---------- Recall leaderboard (Google Sheet via Apps Script web app) ----------
@@ -1960,8 +1962,8 @@ function renderLeaderboard(){
 // 17 Bullets players in 4 groups. Rules (Alex, 21 Oct 2026):
 //  - The last 3 players to FINISH all the recall questions have their score excluded (counts 0).
 //    "Finish order" = time of their final answer (the leaderboard's updated time once they are
-//    complete); anyone not finished yet sorts after everyone who has, so they are the ones
-//    currently excluded until they finish.
+//    complete); anyone not finished yet sorts after everyone who has, so the OUT three are
+//    provisional (whoever is furthest behind) until 14 players have finished.
 //  - Each group counts 4 scores. A group of 5 counts its top 3 scores plus the average
 //    (rounded to the nearest whole number) of its 4th and 5th highest scores.
 //  - Group score = sum of the 4 counted scores. Computed in the browser from the individual
@@ -1973,9 +1975,6 @@ const GROUPS = [
   {name:'Group 4', members:[['Jaylin','Jaylin Williams'],['Max','Max Mackinnon'],['Holt','Jacob Holt'],['Taine','Taine Murray']]},
 ];
 const GROUP_EXCLUDE_LAST = 3;
-// Before anyone has finished (21 Oct, Alex): Billy, Rio and Josh are the 3 OUT to start. Among players who
-// have not finished, these three sort last, so they stay OUT until enough others finish to displace them.
-const GROUP_START_OUT = ['Billy McRae','Rio Bruton','Joshua Duach'];
 const GROUP_COUNTED = 4;
 function lbKey(n){ return String(n).replace(/^#\d+\s*/,'').replace(/\s+/g,' ').trim().toLowerCase(); }
 function computeGroups(rows){
@@ -1988,14 +1987,20 @@ function computeGroups(rows){
     people.push({g, first, full, r, score: r ? Number(r.correct)||0 : 0, answered: r ? Number(r.answered)||0 : 0,
       done: !!(r && Number(r.outOf)>0 && Number(r.answered) >= Number(r.outOf))});
   }));
+  // Finish order: finishers by time of last answer, then unfinished by progress (most answered first).
+  // Only the LAST 3 are OUT, so with 17 players the first 14 to finish are active. Until 14 have
+  // finished, the OUT three are provisional (whoever is furthest behind right now) and change as
+  // people finish. If unfinished players are tied on progress across the cut-off, nobody in that
+  // tie is marked OUT yet, so nobody is excluded arbitrarily.
   const order = people.slice().sort((a,b)=>{
     if(a.done !== b.done) return a.done ? -1 : 1;
     if(a.done) return (Date.parse(a.r.updated)||0) - (Date.parse(b.r.updated)||0);
-    const fa = GROUP_START_OUT.includes(a.full) ? 1 : 0, fb = GROUP_START_OUT.includes(b.full) ? 1 : 0;
-    if(fa !== fb) return fa - fb;
     return b.answered - a.answered;
   });
-  const outSet = new Set(order.slice(-GROUP_EXCLUDE_LAST).map(p=>p.full));
+  const lastN = order.slice(-GROUP_EXCLUDE_LAST), rest = order.slice(0, -GROUP_EXCLUDE_LAST);
+  const activeUnfinished = new Set(rest.filter(p=>!p.done).map(p=>p.answered));
+  const outList = lastN.filter(p=>p.done || !activeUnfinished.has(p.answered));
+  const outSet = new Set(outList.map(p=>p.full));
   const groups = GROUPS.map(g=>{
     const ms = people.filter(p=>p.g===g).map(p=>({first:p.first, full:p.full, r:p.r, done:p.done, answered:p.answered,
       raw:p.score, out:outSet.has(p.full), score: outSet.has(p.full) ? 0 : p.score, avg:false}));
@@ -2012,7 +2017,7 @@ function computeGroups(rows){
   });
   const sorted = groups.slice().sort((a,b)=>b.total-a.total);
   sorted.forEach((g,i)=>{ g.rank = (i>0 && sorted[i-1].total===g.total) ? sorted[i-1].rank : i+1; });
-  return {groups: sorted, finished: people.filter(p=>p.done).length, total: people.length, outNames: order.slice(-GROUP_EXCLUDE_LAST).map(p=>p.first), outOf};
+  return {groups: sorted, finished: people.filter(p=>p.done).length, total: people.length, outNames: outList.map(p=>p.first), outOf};
 }
 function groupsHTML(){
   if(lbError) return '';
@@ -2027,9 +2032,9 @@ function groupsHTML(){
         <span class="gm-tag">${m.out ? 'OUT' : (m.avg ? 'AVG' : (m.done ? '' : (m.answered ? m.answered+'/'+res.outOf : '')))}</span></li>`).join('')}</ul>
       ${g.note ? `<div class="grp-note">${escHTML(g.note)}</div>` : ''}
     </div>`).join('');
-  return `<div class="grp-rules">Best 4 scores count. Last 3 to finish are OUT (score excluded). In a group of 5, the 4th score is the average of the 4th and 5th.</div>
+  return `<div class="grp-rules">Best 4 scores count. Only the last 3 players to finish are OUT (score excluded); the first 14 to finish all count. In a group of 5, the 4th score is the average of the 4th and 5th.</div>
     <div class="grp-grid">${cards}</div>
-    <div class="grp-foot">Finished ${res.finished} of ${res.total}. Currently OUT: ${res.outNames.map(escHTML).join(', ')}.</div>`;
+    <div class="grp-foot">Finished ${res.finished} of ${res.total}. ${res.outNames.length ? 'Currently OUT: '+res.outNames.map(escHTML).join(', ')+'.' : 'Nobody is OUT yet.'} Only the last 3 to finish are OUT, so it can change until 14 have finished.</div>`;
 }
 
 function updateHUD(){
@@ -2123,7 +2128,7 @@ document.querySelectorAll('.card-slot').forEach(slot=>{
     slot.dataset.page = page;
     faces.forEach(f=>f.classList.toggle('active', f.dataset.page===String(page)));
     dots.forEach((d,di)=>d.classList.toggle('active', di===page));
-    if(page!==0 && !reviewed.has(i)){
+    if(page!==0 && !reviewed.has(i) && !PLAYERS[i].noQuiz){
       reviewed.add(i);
       updateHUD();
     }
@@ -2137,7 +2142,7 @@ document.querySelectorAll('.card-slot').forEach(slot=>{
       card.classList.add('locked-shake');
       return;
     }
-    const next = (cur + 1) % 3;
+    const next = PLAYERS[i].noQuiz ? (cur + 1) % 2 : (cur + 1) % 3;
     setPage(next);
   }
   card.addEventListener('click', (e)=>{
